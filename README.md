@@ -80,7 +80,7 @@ Your machine must be able to run programs from a file passed as a parameter and 
 ### Generic instructions
 * You are free to use any C++ version you like.
 * You are free to use any library you like.
-* Any class that declares at least one attribute must be written in canonical form. In- heriting from a class that declares attributes does not count as declaring attributes.
+* Any class that declares at least one attribute must be written in [canonical form](https://www.francescmm.com/orthodox-canonical-class-form/). In- heriting from a class that declares attributes does not count as declaring attributes.
 * It’s forbidden to implement any function in a header file, except for templates and the virtual destructor of a base class.
 * The “keyword” "using namespace" is forbidden.
 
