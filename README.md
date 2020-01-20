@@ -60,3 +60,48 @@ As for any assembly language, the language of AbstractVM is composed of a series
 When a computation involves two operands of different types, the value returned has the type of the more precise operand.<br>
 
 ### Errors
+When one of the following cases is encountered, AbstractVM must raise an exception and stop the execution of the program cleanly. It is forbidden to raise scalar exceptions. Moreover your exception classes must inherit from std::exception. (We need to create our own exception classes!)
+
+* The assembly program includes one or several lexical errors or syntactic errors.
+* An instruction is unknown
+* Overflow on a value
+* Underflow on a value
+* Instruction pop on an empty stack
+* Division/modulo by 0
+* The program doesn’t have an exit instruction
+* An assert instruction is not true
+* The stack is composed of strictly less that two values when an arithmetic instruction is executed.
+
+Perhaps there are more errors cases. However, you machine must never crash (segfault, bus error, infinite loop, unhandled exception, ...).
+<br>
+### Execution
+Your machine must be able to run programs from a file passed as a parameter and from the standard input. When reading from the standard input, the end of the program is indicated by the special symbol ";;" otherwise absent.
+
+### Generic instructions
+* You are free to use any C++ version you like.
+* You are free to use any library you like.
+* Any class that declares at least one attribute must be written in canonical form. In- heriting from a class that declares attributes does not count as declaring attributes.
+* It’s forbidden to implement any function in a header file, except for templates and the virtual destructor of a base class.
+* The “keyword” "using namespace" is forbidden.
+
+### The IOperand interface
+AbstractVM uses 5 operand classes that you must declare and define:
+* Int8
+* Int16
+* Int 32
+* Float
+* Double
+
+Each one of these oeprand classes MUST implement the following IOperand interface:
+
+```
+class IOperand { public:
+virtual int getPrecision( void ) const = 0; virtual eOperandType getType( void ) const = 0;
+virtual IOperand const * operator+( IOperand const & virtual IOperand const * operator-( IOperand const & virtual IOperand const * operator*( IOperand const & virtual IOperand const * operator/( IOperand const & virtual IOperand const * operator%( IOperand const &
+  // Precision of the type of the instance
+  // Type of the instance
+rhs ) const = 0; // Sum
+rhs ) const = 0; // Difference rhs ) const = 0; // Product rhs ) const = 0; // Quotient rhs ) const = 0; // Modulo
+ virtual std::string const & toString( void ) const = 0; // String representation of the instance
+virtual ~IOperand( void ) {} };
+```
