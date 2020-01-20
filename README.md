@@ -109,3 +109,27 @@ public:
   virtual ~IOperand( void ) {} 
 };
 ```
+
+### Creation of a new operand
+New operands MUST be created via a "factory method". Search Google if you don’t know what it is. This member function must have the following prototype:
+```
+ IOperand const * createOperand( eOperandType type, std::string const & value ) const;
+```
+The eOperandType type is an enum defining the following values: Int8, Int16, Int32, Float and Double.
+Depending on the enum value passed as a parameter, the member function createOperand creates a new IOperand by calling one of the following private member functions:
+```
+IOperand const * createInt8( std::string const & value ) const; 
+IOperand const * createInt16( std::string const & value ) const; 
+IOperand const * createInt32( std::string const & value ) const; 
+IOperand const * createFloat( std::string const & value ) const; 
+IOperand const * createDouble( std::string const & value ) const;
+```
+In order to choose the right member function for the creation of the new IOperand, you MUST create and use an array (here, a vector shows little interest) of pointers on member functions with enum values as index.
+
+### The precision
+When an operation happens between two operands of the same type, there is no problem. However, what about when the types are different ? The usual method is to order types using their precision. For this machine you should use the following order: Int8 < Int16 < Int32 < Float < Double. This order may be represented as an enum, as enum values evaluate to integers.
+
+The pure method getPrecision from the interface IOperand allows to get the preci- sion of an operand. When an operation uses two operands from two different types, the comparison of theirs precisions allows to figure out the result type of the operation.
+
+### The Stack
+AbstractVM is a stack based virtual machine. Whereas the stack is an actual stack or another container that behaves like a stack is up to you. Whatever the container, it MUST only contain pointers to the abstract type IOperand.
