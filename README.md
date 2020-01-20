@@ -20,7 +20,7 @@ Let's create simple virtual machine!
 AbstractVM is a machine that uses  a stack to compute simple arithmetic expressions.  
 These arithmetic expressions are provided to the machine as basic assembly programs.  
 <br>
-* assembler(a program for converting instructions written in low-level symbolic code into machine code.)  
+*assembler(a program for converting instructions written in low-level symbolic code into machine code.)*  
 
 ### Abstract 
 
