@@ -19,7 +19,6 @@ Let's create simple virtual machine!
 ## What is AbstractVM?
 AbstractVM is a machine that uses  a stack to compute simple arithmetic expressions.  
 These arithmetic expressions are provided to the machine as basic assembly programs.  
-<br>
 
 ### AbstractVM's assembly language
 
@@ -33,3 +32,5 @@ As for any assembly language, the language of AbstractVM is composed of a series
   - float(z)
   - double(z)
 * **pop**: Unstacks the value from the top of the stack. If the stack is empty, the program execution must stop with an error.  
+* **dump**: Displays each value of the stack, from the most recent one to the oldest one WITHOUT CHANGING the stack. Each value is separated from the next one by a newline.  
+* 
