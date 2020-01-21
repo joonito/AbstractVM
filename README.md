@@ -26,14 +26,9 @@ Assembly code is converted into machine code by **assembler**
 Every assembler has its own assembly language which is designed for exactly one specific computer architecture.
 Assembly language usually has one statement per machine instruction(1:1).
 Assembly langauge uses a mnemonic to represent each low-level machine instruction or opcode. 
-Assembly language instructions usually consist of an opcode mnemonic followed by a list of data, arguments or parameters. These are translated by an assembler into machine language instructions that can be loaded into memory and executed.
-
-<br>
-
-**mnemonic** : A device such as a pattern of letters, ideas, or associations that assists
-<br>
-
-**Opcode** : Abbreviation of operation code, also known as instruction syllable, instruction parcel or opstring. Portion of a machine language instruction that specifies the operation to be performed. 
+Assembly language instructions usually consist of an opcode mnemonic followed by a list of data, arguments or parameters. These are translated by an assembler into machine language instructions that can be loaded into memory and executed.  
+**mnemonic** : A device such as a pattern of letters, ideas, or associations that assists  
+**Opcode** : Abbreviation of operation code, also known as instruction syllable, instruction parcel or opstring. Portion of a machine language instruction that specifies the operation to be performed.  
 
 [Check Wikipedia for more information](https://en.wikipedia.org/wiki/Assembly_language)
 
