@@ -91,6 +91,31 @@ AbstractVM uses 5 operand classes that you must declare and define:
 * Int 32
 * Float
 * Double
+
+<table>
+<tbody><tr>
+<th><p>Number of bits</p></th>
+<th><p>Min. value</p></th>
+<th><p>Max. value</p></th>
+</tr>
+<tr>
+<td><p>8 bit</p></td>
+<td><p><span class="solo-delimiter">–128</span></p></td>
+<td><p><span class="solo-delimiter">127</span></p></td>
+</tr>
+<tr>
+<td><p>16 bit</p></td>
+<td><p><span class="solo-delimiter">–32768</span></p></td>
+<td><p><span class="solo-delimiter">32767</span></p></td>
+</tr>
+<tr>
+<td><p>32 bit</p></td>
+<td><p><span class="solo-delimiter">–2147483648</span></p></td>
+<td><p><span class="solo-delimiter">2147483647</span></p></td>
+</tr>
+</tbody></table>
+
+Each one of these operand classes MUST implement the following IOperand interface:
 ```
 class IOperand {
 public:
@@ -109,6 +134,7 @@ public:
   virtual ~IOperand( void ) {} 
 };
 ```
+Considering similarities between operand classes, it can be relevant to use a class template. However, this is not mandatory.
 
 ### Creation of a new operand
 New operands MUST be created via a "factory method". Search Google if you don’t know what it is. This member function must have the following prototype:
