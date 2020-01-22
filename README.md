@@ -113,7 +113,7 @@ AbstractVM uses 5 operand classes that you must declare and define:
 </tbody></table>
 
 Each one of these operand classes MUST implement the following IOperand interface:
-```
+```cpp
 class IOperand {
 public:
   
@@ -135,12 +135,12 @@ Considering similarities between operand classes, it can be relevant to use a cl
 
 ### Creation of a new operand
 New operands MUST be created via a "factory method". Search Google if you don’t know what it is. This member function must have the following prototype:
-```
+```cpp
  IOperand const * createOperand( eOperandType type, std::string const & value ) const;
 ```
 The eOperandType type is an enum defining the following values: Int8, Int16, Int32, Float and Double.
 Depending on the enum value passed as a parameter, the member function createOperand creates a new IOperand by calling one of the following private member functions:
-```
+```cpp
 IOperand const * createInt8( std::string const & value ) const; 
 IOperand const * createInt16( std::string const & value ) const; 
 IOperand const * createInt32( std::string const & value ) const; 
