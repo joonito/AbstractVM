@@ -2,6 +2,8 @@
 #define LEXER_HPP
 
 #include "IOperand.hpp"
+#include "Token.hpp"
+#include <regex>
 
 #define PUSH "push"
 #define POP "pop"
@@ -14,44 +16,37 @@
 #define MOD "mod"
 #define PRINT "print"
 #define EXIT "exit"
+#define TERMINATE ";;"
 
-#define INT8 "int8"
-#define INT16 "int16"
-#define INT32 "int32"
-#define FLOAT "float"
-#define DOUBLE "double"
+#define INT8PATTERN "int8\\({1}-?\\d+\\){1}"
+#define INT16PATTERN "int16\\({1}-?\\d+\\){1}"
+#define INT32PATTERN "int32\\({1}-?\\d+\\){1}"
+#define FLOATPATTERN "float\\({1}-?\\d+\\.{1}\\d+\\){1}"
+#define DOUBLEPATTERN "double\\({1}-?\\d+\\.{1}\\d+\\){1}"
 
-enum InstructionType {
-    push,
-    pop,
-    dump,
-    assert,
-    add,
-    sub,
-    mul,
-    _div,
-    mod,
-    print,
-    _exit,
-    unknownInstr
-};
 
 class Lexer {
     public:
         Lexer();
         Lexer(const Lexer & other);
+        Lexer(bool stdIn);
         ~Lexer();
         Lexer & operator = (const Lexer &rhs);
 
-        InstructionType instrIdentifier(std::string const &token);
-        eOperandType operandIdentifier(std::string const &token, std::string &value);
+        std::deque<Token const *> tokenizer(std::string const & line);
         bool hasError(void) const;
-    
+
     private:
-        std::vector<std::string> tokenizer(std::string const &line, char delim) const;
-        bool isNumeric(std::string const &str) const;
+
         bool lexErr;
+        bool stdInput;
+        bool lineErr;
+
+        Token const * createToken(std::string const &word, bool comment = false);
+        std::deque<std::string> splitter(std::string const &line, char delim) const;
+        void removeUseless(std::deque<Token const *> & tokens);        
         void setError(void);
+        bool checkStdInput(void) const;
 };
 
 #endif

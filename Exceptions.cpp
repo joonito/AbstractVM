@@ -4,13 +4,13 @@ const char *LexicalErrorException::what() const throw() {
     return "LexicalErrorException: Lexical error has occurred";
 }
 
-const char * SyntaticErrorException::what() const throw() {
+const char * SyntacticErrorException::what() const throw() {
     return "SyntaticErrorException: Wrong syntax";
 }
 
-const char * UnknownInstructionException::what() const throw() {
-    return "UnknownInstructionException: Instruction is unknown";
-}
+// const char * UnknownInstructionException::what() const throw() {
+//     return "UnknownInstructionException: Instruction is unknown";
+// }
 
 const char * OverflowException::what() const throw() {
     return "OverflowException: Value overflow";

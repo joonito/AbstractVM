@@ -1,0 +1,12 @@
+CreateOperand.cpp
+DoubleOperand.cpp
+Exceptions.cpp
+FloatOperand.cpp
+Int16Operand.cpp
+Int32Operand.cpp
+Int8Operand.cpp
+Lexer.cpp
+Parser.cpp
+Token.cpp
+VirtualMachine.cpp
+main.cpp

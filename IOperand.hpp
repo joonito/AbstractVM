@@ -31,7 +31,6 @@ enum eOperandType {
     Int32,
     Float,
     Double,
-    UnknownOperand
 };
 
 class IOperand {

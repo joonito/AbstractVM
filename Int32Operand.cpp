@@ -51,8 +51,10 @@ IOperand const * Int32Operand::operator+( IOperand const & rhs ) const {
         const IOperand *newRhs = co.createOperand(lshType, rhs.toString());
         long long int l = std::stoll(this->toString(), nullptr);
         long long int r = std::stoll(newRhs->toString(), nullptr);
+
         delete newRhs;
         const IOperand *ret = co.createOperand(lshType, "0");
+
         try {
             if (!IS_INT32_RANGE(l + r))
                 throw OverflowException();

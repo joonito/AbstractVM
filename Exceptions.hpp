@@ -5,7 +5,7 @@ class LexicalErrorException : public std::exception {
         const char * what() const throw();
 };
 
-class SyntaticErrorException : public std::exception {
+class SyntacticErrorException : public std::exception {
     public:
         const char * what() const throw();
 };

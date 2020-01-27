@@ -7,15 +7,15 @@ FloatOperand::FloatOperand() {
 
 FloatOperand::FloatOperand(std::string const &value) {
     try {
-        std::size_t dpoint = value.find(".");
-        if (dpoint != std::string::npos) {
+        std::size_t dPoint = value.find(".");
+        if (dPoint != std::string::npos) {
             std::size_t length = value.length();
-            std::size_t fpLength = length - dpoint;
+            std::size_t fpLength = length - dPoint;
             std::size_t wnLength = length - fpLength - 1;
             if (wnLength > DOUBLE_LEN_LIM) {
                 throw OverflowException();
             }
-            std::string fpart = value.substr(dpoint + 1);
+            std::string fpart = value.substr(dPoint + 1);
             int zeroCount = 0;
             while (fpart[zeroCount] == '0')
                 zeroCount++;
@@ -261,7 +261,11 @@ std::string const & FloatOperand::toString(void) const {
     std::ostringstream strs;
     strs << std::fixed;
     strs << std::setprecision(getPrecision()) << this->value;
-    std::string const *tmp = new std::string(strs.str());
-    std::string const &ret = *tmp;
+    std::string tmp = std::string(strs.str());
+    int i;
+    for (i = tmp.length() - 1; tmp[i] == '0'; i--)
+        ;
+    std::string const *trimmed = new std::string(tmp.substr(0, i + 1));
+    std::string const &ret = *trimmed;
     return ret;
 }
