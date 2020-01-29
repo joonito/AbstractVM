@@ -38,7 +38,6 @@ class VirtualMachine {
 
         Token const * getNextToken(std::deque<Token const * > & tokens);
         std::deque<Token const *> getNextInst(std::deque<std::deque<Token const *> > & instructions);
-        // void removeUseless(std::deque<Token const *> & tokens);
         IOperand const * dataToOperand(std::string const &data);
     public:
         VirtualMachine();

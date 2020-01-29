@@ -7,16 +7,16 @@ Int16Operand::Int16Operand() {
 
 Int16Operand::Int16Operand(std::string const & value) {
     try {
-        if (value.length() > 6)
+    if (value.length() > 6)
+        throw OverflowException();
+    else {
+        this->value = std::stoll(value, nullptr);
+        if (!IS_INT16_RANGE(this->value))
             throw OverflowException();
-        else {
-            this->value = std::stoll(value, nullptr);
-            if (!IS_INT16_RANGE(this->value))
-                throw OverflowException();
-        }
-    } catch (OverflowException& e) {
-        std::cout << e.what() << std::endl;
-        std::exit( EXIT_FAILURE );
+    }} catch (const OverflowException & e) {
+        std::cerr << e.what() << std::endl;
+        if (g_stdIn == true)
+            exit( EXIT_FAILURE );
     }
 }
 
@@ -25,7 +25,6 @@ Int16Operand::Int16Operand(const Int16Operand &other) {
 }
 
 Int16Operand::~Int16Operand() {
-    // std::cout << "Int16Operand: Destructor called" << std::endl;
 }
 
 Int16Operand & Int16Operand::operator = (const Int16Operand &rhs) {
@@ -54,16 +53,16 @@ IOperand const * Int16Operand::operator+( IOperand const & rhs ) const {
         delete newRhs;
         const IOperand *ret = co.createOperand(lshType, "0");
         try {
-            if (!IS_INT16_RANGE(l + r))
-                throw OverflowException();
-            else {
-                std::string value = std::to_string(l + r);
-                delete ret;
-                ret = co.createOperand(lshType, value);
-            }
-        } catch (OverflowException& e) {
-            std::cout << e.what() << std::endl;
-            std::exit( EXIT_FAILURE );
+        if (!IS_INT16_RANGE(l + r))
+            throw OverflowException();
+        else {
+            std::string value = std::to_string(l + r);
+            delete ret;
+            ret = co.createOperand(lshType, value);
+        }} catch (const OverflowException & e) {
+            std::cerr << e.what() << std::endl;
+            if (g_stdIn == true)
+                exit( EXIT_FAILURE );
         }
         return ret;
     }
@@ -85,16 +84,16 @@ IOperand const * Int16Operand::operator-( IOperand const & rhs ) const {
         delete newRhs;
         const IOperand *ret = co.createOperand(lshType, "0");
         try {
-            if (!IS_INT16_RANGE(l - r))
-                throw OverflowException();
-            else {
-                std::string value = std::to_string(l - r);
-                delete ret;
-                ret = co.createOperand(lshType, value);
-            }
-        } catch (OverflowException& e) {
-            std::cout << e.what() << std::endl;
-            std::exit( EXIT_FAILURE );
+        if (!IS_INT16_RANGE(l - r))
+            throw OverflowException();
+        else {
+            std::string value = std::to_string(l - r);
+            delete ret;
+            ret = co.createOperand(lshType, value);
+        }} catch (const OverflowException & e) {
+            std::cerr << e.what() << std::endl;
+            if (g_stdIn == true)
+                exit( EXIT_FAILURE );
         }
         return ret;
     }
@@ -116,16 +115,16 @@ IOperand const * Int16Operand::operator*( IOperand const & rhs ) const {
         delete newRhs;
         const IOperand *ret = co.createOperand(lshType, "0");
         try {
-            if (!IS_INT16_RANGE(l * r))
-                throw OverflowException();
-            else {
-                std::string value = std::to_string(l * r);
-                delete ret;
-                ret = co.createOperand(lshType, value);
-            }
-        } catch (OverflowException& e) {
-            std::cout << e.what() << std::endl;
-            std::exit( EXIT_FAILURE );
+        if (!IS_INT16_RANGE(l * r))
+            throw OverflowException();
+        else {
+            std::string value = std::to_string(l * r);
+            delete ret;
+            ret = co.createOperand(lshType, value);
+        }} catch (const OverflowException & e) {
+            std::cerr << e.what() << std::endl;
+            if (g_stdIn == true)
+                exit( EXIT_FAILURE );
         }
         return ret;
     }
@@ -147,21 +146,22 @@ IOperand const * Int16Operand::operator/( IOperand const & rhs ) const {
         delete newRhs;
         const IOperand *ret = co.createOperand(lshType, "0");
         try {
-            if (IS_ZERO(r))
-                throw DivisionByZeroException();
-            if (!IS_INT16_RANGE(l / r))
-                throw OverflowException();
-            else {
-                std::string value = std::to_string(l / r);
-                delete ret;
-                ret = co.createOperand(lshType, value);
-            }
-        } catch (OverflowException& e) {
-            std::cout << e.what() << std::endl;
-            std::exit( EXIT_FAILURE );
-        } catch (DivisionByZeroException& e) {
-            std::cout << e.what() << std::endl;
-            std::exit( EXIT_FAILURE );
+        if (IS_ZERO(r))
+            throw DivisionByZeroException();
+        if (!IS_INT16_RANGE(l / r))
+            throw OverflowException();
+        else {
+            std::string value = std::to_string(l / r);
+            delete ret;
+            ret = co.createOperand(lshType, value);
+        }} catch (const DivisionByZeroException & e) {
+            std::cerr << e.what() << std::endl;
+            if (g_stdIn == true)
+                exit( EXIT_FAILURE );
+        } catch (const OverflowException & e) {
+            std::cerr << e.what() << std::endl;
+            if (g_stdIn == true)
+                exit( EXIT_FAILURE );
         }
         return ret;
     }
@@ -183,21 +183,22 @@ IOperand const * Int16Operand::operator%( IOperand const & rhs ) const {
         delete newRhs;
         const IOperand *ret = co.createOperand(lshType, "0");
         try {
-            if (IS_ZERO(r))
-                throw ModuloByZeroException();
-            if (!IS_INT16_RANGE(l % r))
-                throw OverflowException();
-            else {
-                std::string value = std::to_string(l % r);
-                delete ret;
-                ret = co.createOperand(lshType, value);
-            }
-        } catch (OverflowException& e) {
-            std::cout << e.what() << std::endl;
-            std::exit( EXIT_FAILURE );
-        } catch (ModuloByZeroException& e) {
-            std::cout << e.what() << std::endl;
-            std::exit( EXIT_FAILURE );
+        if (IS_ZERO(r))
+            throw ModuloByZeroException();
+        if (!IS_INT16_RANGE(l % r))
+            throw OverflowException();
+        else {
+            std::string value = std::to_string(l % r);
+            delete ret;
+            ret = co.createOperand(lshType, value);
+        }} catch (const ModuloByZeroException & e) {
+            std::cerr << e.what() << std::endl;
+            if (g_stdIn == true)
+                exit( EXIT_FAILURE );
+        } catch (const OverflowException & e) {
+            std::cerr << e.what() << std::endl;
+            if (g_stdIn == true)
+                exit( EXIT_FAILURE );
         }
         return ret;
     }

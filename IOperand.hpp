@@ -12,6 +12,8 @@
 #include <sstream>
 #include <iomanip>
 #include <ctype.h>
+#include <deque>
+#include <list>
 
 #define IS_INT8_RANGE(x) (-128 <= x && x < 128)
 #define IS_INT16_RANGE(x) (-32768 <= x && x < 32768)
@@ -24,6 +26,8 @@
 #define FLOAT_PRECISION 7
 #define DOUBLE_PRECISION 15
 #define IS_ZERO(x) (x == 0)
+
+extern bool g_stdIn;
 
 enum eOperandType {
     Int8,
@@ -159,14 +163,23 @@ class DoubleOperand : public IOperand {
 };
 
 class CreateOperand {
+    typedef  IOperand const * (CreateOperand::*coMemFn)(std::string const &) const;
     public:
+        CreateOperand();
+        CreateOperand(const CreateOperand & other);
+        ~CreateOperand();
+        CreateOperand & operator = (const CreateOperand & rhs);
         IOperand const * createOperand( eOperandType type, std::string const & value ) const;
     private:
+        coMemFn *arrFp;
         IOperand const * createInt8( std::string const & value ) const; 
         IOperand const * createInt16( std::string const & value ) const; 
         IOperand const * createInt32( std::string const & value ) const; 
         IOperand const * createFloat( std::string const & value ) const; 
         IOperand const * createDouble( std::string const & value ) const;
 };
+
+
+
 
 #endif

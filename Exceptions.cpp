@@ -8,10 +8,6 @@ const char * SyntacticErrorException::what() const throw() {
     return "SyntaticErrorException: Wrong syntax";
 }
 
-// const char * UnknownInstructionException::what() const throw() {
-//     return "UnknownInstructionException: Instruction is unknown";
-// }
-
 const char * OverflowException::what() const throw() {
     return "OverflowException: Value overflow";
 }

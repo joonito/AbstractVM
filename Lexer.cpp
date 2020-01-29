@@ -86,29 +86,27 @@ std::deque<Token const *> Lexer::tokenizer(std::string const &line) {
     if (cPos != std::string::npos) {
         std::string lineWithoutComent = line.substr(0, cPos);
         words = splitter(lineWithoutComent, ' ');
-        
         comment = line.substr(cPos + 1);
     } else {
         words = splitter(line, ' ');
     }
+    try{
     for (std::size_t i = 0; i < words.size(); i++) {
-        try {
-            // std::cout << words[i] << std::endl;
-            token = createToken(words[i], false);
-            if (token->getType() == tokenType::unknown)
-                throw LexicalErrorException();
-        } catch (LexicalErrorException& e) {
-            lineErr = true;
-            std::cout << e.what() << std::endl;
-            setError();
-            if (checkStdInput() == true)
-                exit( EXIT_FAILURE );
+        token = createToken(words[i], false);
+        if (token->getType() == tokenType::unknown) {
+            throw LexicalErrorException();
         }
         tokens.push_back(token);
     }
     if (comment != "") {
         token = createToken(comment, true);
         tokens.push_back(token);
+    }} catch (const LexicalErrorException & e) {
+        std::cerr << e.what() << std::endl;
+        lineErr = true;
+        setError();
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
     }
     removeUseless(tokens);
     if (lineErr == true)

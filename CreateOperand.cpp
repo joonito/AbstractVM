@@ -1,42 +1,73 @@
 #include "IOperand.hpp"
 
-IOperand const * CreateOperand::createOperand(eOperandType type, std::string const & value) const {
+CreateOperand::CreateOperand() {
+    arrFp = new coMemFn[5];
+    arrFp[Int8] = &CreateOperand::createInt8;
+    arrFp[Int16] = &CreateOperand::createInt16;
+    arrFp[Int32] = &CreateOperand::createInt32;
+    arrFp[Float] = &CreateOperand::createFloat;
+    arrFp[Double] = &CreateOperand::createDouble;
+}
 
-    switch (type) {
-        case Int8:
-            return createInt8(value);
-            break;
-        case Int16:
-            return createInt16(value);
-            break;
-        case Int32:
-            return createInt32(value);
-            break;
-        case Float:
-            return createFloat(value);
-            break;
-        case Double:
-            return createDouble(value);
-            break;
-    }
+CreateOperand::CreateOperand(const CreateOperand & other) {
+    this->arrFp = other.arrFp;
+}
+
+CreateOperand::~CreateOperand() {
+}
+
+CreateOperand & CreateOperand::operator = (const CreateOperand & rhs) {
+    if (this != &rhs)
+        this->arrFp = rhs.arrFp;
+    return *this;
+}
+
+IOperand const * CreateOperand::createOperand(eOperandType type, std::string const & value) const {
+    return ((this->*(arrFp[type]))(value));
 }
 
 IOperand const * CreateOperand::createInt8( std::string const & value ) const {
-    return new Int8Operand(value);
+    try {
+    IOperand const * tmp = nullptr;
+    tmp = new Int8Operand(value);
+    return tmp;
+    } catch (const std::bad_alloc & e) {
+        std::cerr << e.what() << std::endl;
+    }
+    return nullptr;
 } 
 
 IOperand const * CreateOperand::createInt16( std::string const & value ) const {
-    return new Int16Operand(value);
+    IOperand const * tmp = nullptr;
+    tmp = new Int16Operand(value);
+    if (tmp != nullptr)
+        return tmp;
+    return nullptr;
 } 
 
 IOperand const * CreateOperand::createInt32( std::string const & value ) const {
-    return new Int32Operand(value);
+    IOperand const * tmp = nullptr;
+    tmp = new Int32Operand(value);
+    if (tmp != nullptr)
+        return tmp;
+    return nullptr;
 }
 
 IOperand const * CreateOperand::createFloat( std::string const & value ) const {
-    return new FloatOperand(value);
+    try {
+    IOperand const * tmp = nullptr;
+    tmp = new FloatOperand(value);
+        return tmp;
+    } catch (const std::bad_alloc & e) {
+        std::cerr << e.what() << std::endl;
+    }
+    return nullptr;
 } 
 
 IOperand const * CreateOperand::createDouble( std::string const & value ) const {
-    return new DoubleOperand(value);
+    IOperand const * tmp = nullptr;
+    tmp = new DoubleOperand(value);
+    if (tmp != nullptr)
+        return tmp;
+    return nullptr;
 }

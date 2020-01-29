@@ -22,7 +22,6 @@ class Parser {
         void setError(void);
         bool checkStdInput(void) const;
 
-        void removeUseless(std::deque<Token const *> & tokens);
 };
 
 #endif

@@ -44,12 +44,10 @@ void VirtualMachine::runInstruction(std::deque<std::deque<Token const * > > & in
     Token const *inst = nullptr;
     while (!instructions.empty()) {
         instruction = getNextInst(instructions);
-        // removeUseless(instruction);
         inst = nullptr;
         if (!instruction.empty()) {
             inst = getNextToken(instruction);
             if (inst->getType() == tokenType::instruction) {
-                // std::cout << "exit? :" << inst->getValue() << std::endl;
                 if (inst->getValue() == POP) {
                     pop();
                 } else if (inst->getValue() == DUMP) {
@@ -85,43 +83,43 @@ void VirtualMachine::runInstruction(std::deque<std::deque<Token const * > > & in
     }
     try {
         throw NoExitInstructionException();
-    } catch (NoExitInstructionException& e) {
-        std::cout << e.what() << std::endl;
-        setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
+    } catch (const NoExitInstructionException & e) {
+        std::cerr << e.what() << std::endl;
+        exit (EXIT_FAILURE);
     }
 }
 
 void VirtualMachine::pop(void) {
     try {
-        if (!stack.empty())
-            stack.pop_back();
-        else
-            throw EmptyStackException();
-    } catch (EmptyStackException& e){
-        std::cout << e.what() << std::endl;
+    if (!stack.empty())
+        stack.pop_back();
+    else {
+        throw EmptyStackException();
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
+    }} catch (const EmptyStackException &e) {
+        std::cerr << e.what() << std::endl;
+        setError();
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
     }
 }
 
 void VirtualMachine::dump(void) {
-    try {
-        if (!stack.empty()) {
-            if (lexErr == false && parseErr == false && vmErr == false) {
-                for (int i = stack.size() - 1; i >= 0; i--) {
-                    std::cout << stack[i]->toString() << std::endl;
-                }
+    try{
+    if (!stack.empty()) {
+        if (lexErr == false && parseErr == false && vmErr == false) {
+            for (int i = stack.size() - 1; i >= 0; i--) {
+                std::cout << stack[i]->toString() << std::endl;
             }
-        } else
-            throw EmptyStackException();
-    } catch (EmptyStackException& e) {
-        std::cout << e.what() << std::endl;
+        }
+    } else {
+        throw EmptyStackException();
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
+    }} catch (const EmptyStackException &e) {
+        std::cerr << e.what() << std::endl;
+        setError();
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
     }
 }
 
@@ -134,21 +132,19 @@ void VirtualMachine::add(void) {
                 IOperand const * v2 = stack.back();
                 stack.pop_back();
                 IOperand const * res = *v1 + *v2;
-                stack.push_back(res);
-            } else
+                if (res != nullptr)
+                    stack.push_back(res);
+            } else {
                 throw NotEnoughValuesException();
-        } else
+            }
+        } else {
             throw NotEnoughValuesException();
-    } catch (EmptyStackException& e) {
-        std::cout << e.what() << std::endl;
+        }
+    } catch (const NotEnoughValuesException &e) {
+        std::cerr << e.what() << std::endl;
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
-    } catch (NotEnoughValuesException& e) {
-        std::cout << e.what() << std::endl;
-        setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
     }
 }
 
@@ -161,21 +157,19 @@ void VirtualMachine::sub(void) {
                 IOperand const * v2 = stack.back();
                 stack.pop_back();
                 IOperand const * res = *v2 - *v1;
-                stack.push_back(res);
-            } else
+                if (res != nullptr)
+                    stack.push_back(res);
+            } else {
                 throw NotEnoughValuesException();
-        } else
+            }
+        } else {
             throw NotEnoughValuesException();
-    } catch (EmptyStackException& e) {
-        std::cout << e.what() << std::endl;
+        }
+    } catch (const NotEnoughValuesException & e) {
+        std::cerr << e.what() << std::endl;
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
-    } catch (NotEnoughValuesException& e) {
-        std::cout << e.what() << std::endl;
-        setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
     }
 }
 
@@ -188,127 +182,130 @@ void VirtualMachine::mul(void) {
                 IOperand const * v2 = stack.back();
                 stack.pop_back();
                 IOperand const * res = *v1 * *v2;
-                stack.push_back(res);
-            } else
+                if (res != nullptr)
+                    stack.push_back(res);
+            } else {
                 throw NotEnoughValuesException();
-        } else
+            }
+        } else {
             throw NotEnoughValuesException();
-    } catch (EmptyStackException& e) {
-        std::cout << e.what() << std::endl;
+        }
+    } catch (const NotEnoughValuesException & e) {
+        std::cerr << e.what() << std::endl;
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
-    } catch (NotEnoughValuesException& e) {
-        std::cout << e.what() << std::endl;
-        setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
     }
 }
 
 void VirtualMachine::div(void) {
     try {
+    if (!stack.empty()) {
+        IOperand const * v1 = stack.back();
+        stack.pop_back();
         if (!stack.empty()) {
-            IOperand const * v1 = stack.back();
+            IOperand const * v2 = stack.back();
             stack.pop_back();
-            if (!stack.empty()) {
-                IOperand const * v2 = stack.back();
-                stack.pop_back();
-                IOperand const * res = *v2 / *v1;
+            IOperand const * res = *v2 / *v1;
+            if (res != nullptr)
                 stack.push_back(res);
-            } else
-                throw NotEnoughValuesException();
-        } else
+        } else {
             throw NotEnoughValuesException();
-    } catch (EmptyStackException& e) {
-        std::cout << e.what() << std::endl;
+            setError();
+        }
+    } else {
+        throw NotEnoughValuesException();
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
-    } catch (NotEnoughValuesException& e) {
-        std::cout << e.what() << std::endl;
+    }} catch (const NotEnoughValuesException & e) {
+        std::cerr << e.what() << std::endl;
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
     }
 }
 
 void VirtualMachine::mod(void) {
     try {
+    if (!stack.empty()) {
+        IOperand const * v1 = stack.back();
+        stack.pop_back();
         if (!stack.empty()) {
-            IOperand const * v1 = stack.back();
+            IOperand const * v2 = stack.back();
             stack.pop_back();
-            if (!stack.empty()) {
-                IOperand const * v2 = stack.back();
-                stack.pop_back();
-                IOperand const * res = *v2 % *v1;
+            IOperand const * res = *v2 % *v1;
+            if (res != nullptr)
                 stack.push_back(res);
-            } else
-                throw NotEnoughValuesException();
-        } else
+        } else {
             throw NotEnoughValuesException();
-    } catch (EmptyStackException& e) {
-        std::cout << e.what() << std::endl;
+            setError();
+        }
+    } else {
+        throw NotEnoughValuesException();
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
-    } catch (NotEnoughValuesException& e) {
-        std::cout << e.what() << std::endl;
+    }} catch (const NotEnoughValuesException & e) {
+        std::cerr << e.what() << std::endl;
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
     }
 }
 
 void VirtualMachine::print(void) {
-    try {
-        if (stack.empty())
-            throw EmptyStackException();
-        IOperand const *operand = stack.back();
-        if (operand->getType() == Int8) {
-            char c = std::stoi(operand->toString());
-            if (lexErr == false && parseErr == false && vmErr == false)
-                std::cout << c << std::endl;
-        } else {
-            throw AssertionFailureException();
-        }
-    } catch (AssertionFailureException& e) {
-        std::cout << e.what() << std::endl;
+    try{
+    if (stack.empty())
+        throw EmptyStackException();
+    IOperand const *operand = stack.back();
+    if (operand->getType() == Int8) {
+        char c = std::stoi(operand->toString());
+        if (lexErr == false && parseErr == false && vmErr == false)
+            std::cout << c << std::endl;
+    } else {
+        throw AssertionFailureException();
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
-    } catch (EmptyStackException& e) {
-        std::cout << e.what() << std::endl;
+    }} catch (const EmptyStackException & e) {
+        std::cerr << e.what() << std::endl;
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
+    } catch (const AssertionFailureException & e) {
+        std::cerr << e.what() << std::endl;
+        setError();
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
     }
 }
 
 void VirtualMachine::push(Token const * token) {
     std::string rawData = token->getValue();
     IOperand const *operand = dataToOperand(rawData);
-    stack.push_back(operand);
+    if (operand != nullptr) {
+        stack.push_back(operand);
+    }
 }
 
 void VirtualMachine::assert(Token const * token) {
     try {
-        IOperand const *v1 = dataToOperand(token->getValue());
-        if (stack.empty())
-            throw EmptyStackException();
-        IOperand const *v2 = stack.back();
-        if (!(v1->getType() == v2->getType() && v1->toString() == v2->toString()))
-            throw AssertionFailureException();
-    } catch (AssertionFailureException& e) {
-        std::cout << e.what() << std::endl;
+    IOperand const *v1 = dataToOperand(token->getValue());
+    if (v1 == nullptr)
+        return;
+    if (stack.empty()) {
+        throw EmptyStackException();
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
-    } catch (EmptyStackException& e) {
-        std::cout << e.what() << std::endl;
+    }
+    IOperand const *v2 = stack.back();
+    if (!(v1->getType() == v2->getType() && v1->toString() == v2->toString())) {
+        throw AssertionFailureException();
         setError();
-        if (checkStdInput() == true)
-            exit(EXIT_FAILURE);
+    }} catch (const EmptyStackException & e) {
+        std::cerr << e.what() << std::endl;
+        setError();
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
+    } catch (const AssertionFailureException & e) {
+        std::cerr << e.what() << std::endl;
+        setError();
+        if (stdInput == true)
+            exit( EXIT_FAILURE );
     }
 }
 
@@ -353,14 +350,6 @@ std::deque<Token const *> VirtualMachine::getNextInst(std::deque<std::deque<Toke
     }
     return instruction;
 }
-
-
-// void VirtualMachine::removeUseless(std::deque<Token const *> & tokens) {
-//     for (int i = tokens.size() - 1; i >= 0; i--) {
-//         if (tokens[i]->getType() == tokenType::comment)
-//             tokens.erase(tokens.begin() + i);
-//     }
-// }
 
 bool VirtualMachine::hasError(void) const{
     return this->vmErr;
