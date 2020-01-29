@@ -20,7 +20,7 @@ Let's create simple virtual machine!
 AbstractVM is a machine that uses  a stack to compute simple arithmetic expressions.  
 These arithmetic expressions are provided to the machine as basic assembly programs.  
 
-### Wait.. what is assembly!?
+### What the heck is assembly!?
 
 Assembly code is converted into machine code by **assembler**
 Every assembler has its own assembly language which is designed for exactly one specific computer architecture.
